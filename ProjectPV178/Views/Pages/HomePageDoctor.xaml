@@ -1,0 +1,67 @@
+﻿<Page x:Class="ProjectPV178.Views.Pages.HomePageDoctor"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:ProjectPV178.Views.Pages"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="500"
+      Title="HomePageDoctor">
+
+    <Grid Background="White">
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="3*"/>
+            <ColumnDefinition Width="2*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="5*"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Grid.Column="1" Orientation="Vertical" Grid.Row="1">
+            <Calendar Margin="5"/>
+            <ComboBox x:Name="DepartmentComboBox" DisplayMemberPath="Name" Margin="5" ItemsSource="{Binding Departments}"  SelectionChanged="DepartmentComboBox_SelectionChanged"/>
+            <Label x:Name="DepLabel" Margin="5" UseLayoutRounding="False"/>
+        </StackPanel>
+        
+        <StackPanel Margin="0,0,10,0" Grid.Row="0" Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Center">
+            <Label Grid.Row="0" Width="130" Grid.Column="1" Padding="0,0,5,0" HorizontalAlignment="Right" Content="Logged in as:" HorizontalContentAlignment="Right"/>
+            <Label Grid.Row="0" Width="130" Grid.Column="1" HorizontalAlignment="Right" FontWeight="Bold" HorizontalContentAlignment="Right">
+                <TextBlock Text="{Binding NameString}" TextWrapping="Wrap" TextAlignment="Right" />
+            </Label>
+            <Button Content="Log out" Width="50" HorizontalAlignment="Right" Click="Button_Logout"/>
+        </StackPanel>
+
+        <TabControl Grid.RowSpan="2" Grid.Column="0">
+            <TabItem Header="Patients">
+                <DataGrid x:Name="DataGrid1" Grid.Row="1" AutoGenerateColumns="False">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Username" Binding="{Binding Username}"/>
+                        <DataGridTextColumn Header="Name" Binding="{Binding Name}"/>
+                        <DataGridTextColumn Header="Surname" Binding="{Binding Surname}"/>
+                        <DataGridTextColumn Header="Password" Binding="{Binding Password}"/>
+                        <DataGridCheckBoxColumn  Header="IsDoctor" IsReadOnly="true" Binding="{Binding IsDoctor,Mode=OneWay}"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </TabItem>
+            <TabItem Header="My Departments">
+                <StackPanel>
+                    <UniformGrid Rows="1" Columns="2">
+                        <ComboBox x:Name="AssignDep" DisplayMemberPath="Name" Margin="5" ItemsSource="{Binding Departments}"/>
+                        <Button Content="Assign to new department" Margin="5,5,5,5" Padding="3,3,3,3" FontSize="10" Click="Button_Assign"/>
+                    </UniformGrid>
+
+                    <Label Content="My departments:" Padding="5,0,0,0" UseLayoutRounding="True"/>
+                    <ComboBox x:Name="MyDepartmentComboBox" DisplayMemberPath="Name" Margin="5" ItemsSource="{Binding MyDepartments}"  SelectionChanged="MyDepartmentComboBox_SelectionChanged"/>
+                    <Label x:Name="MyDepLabel" Margin="5" UseLayoutRounding="False"/>
+                </StackPanel>
+
+            </TabItem>
+            <TabItem Header="Edit working hours">
+            </TabItem>
+        </TabControl>
+
+
+    </Grid>
+</Page>
