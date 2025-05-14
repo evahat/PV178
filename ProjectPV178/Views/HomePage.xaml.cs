@@ -1,5 +1,7 @@
-﻿using System;
+﻿using ProjectPV178.Data;
+using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,18 +18,24 @@ using System.Windows.Shapes;
 namespace ProjectPV178.Views
 {
     /// <summary>
-    /// Interaction logic for Page2.xaml
+    /// Interaction logic for Page1.xaml
     /// </summary>
-    public partial class Page2 : Page
+    public partial class HomePage : Page
     {
-        public Page2()
+        
+        public HomePage()
         {
             InitializeComponent();
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            this.NavigationService.Source = new Uri("Page1.xaml",UriKind.Relative);
+            //login
+        }
+
+        private void Button_Click_1(object sender, RoutedEventArgs e)
+        {
+            Table.Content = new MyReservations();
         }
     }
 }

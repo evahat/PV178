@@ -23,7 +23,7 @@ namespace ProjectPV178
         public MainWindow()
         {
             InitializeComponent();
-            Main.Content = new Page2();
+            Main.Navigate(new LoginPage());
         }
     }
 }

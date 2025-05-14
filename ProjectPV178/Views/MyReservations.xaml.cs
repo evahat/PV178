@@ -18,14 +18,14 @@ using System.Windows.Shapes;
 namespace ProjectPV178.Views
 {
     /// <summary>
-    /// Interaction logic for Page1.xaml
+    /// Interaction logic for MyReservations.xaml
     /// </summary>
-    public partial class Page1 : Page
+    public partial class MyReservations : Page
     {
         public ObservableCollection<Day> Days { get; set; }
         public ObservableCollection<Department> Departments { get; set; }
         public ObservableCollection<TimeReservation> Reservations { get; set; }
-        public Page1()
+        public MyReservations()
         {
             InitializeComponent();
 
@@ -39,16 +39,6 @@ namespace ProjectPV178.Views
             };
             Reservations = Days[0].Info;
             DataContext = this;
-        }
-
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            //login
-        }
-
-        private void Button_Click_1(object sender, RoutedEventArgs e)
-        {
-
         }
     }
 }
