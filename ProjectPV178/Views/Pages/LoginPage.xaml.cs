@@ -2,6 +2,7 @@
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using ProjectPV178.Views.Pages;
 
 namespace ProjectPV178.Views
 {
@@ -20,7 +21,8 @@ namespace ProjectPV178.Views
             try
             {
                 await PeopleRepository.AddPerson(Username.Text, Name.Text, Surname.Text, Password.Password, IsDoctor.IsChecked ?? false);
-                this.NavigationService?.Navigate(new HomePage());
+                var user = PeopleRepository.CurrentUser;
+                this.NavigationService?.Navigate(user.IsDoctor ? new HomePageDoctor() : new HomePagePatient());
             }
             catch (Microsoft.EntityFrameworkCore.DbUpdateException ex)
             {
@@ -53,7 +55,7 @@ namespace ProjectPV178.Views
                     throw new ArgumentException();
                 }
                 PeopleRepository.CurrentUser = user;
-                this.NavigationService?.Navigate(new HomePage());
+                this.NavigationService?.Navigate(user.IsDoctor ? new HomePageDoctor() : new HomePagePatient());
             }
             catch (ArgumentOutOfRangeException ex)
             {

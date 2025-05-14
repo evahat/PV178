@@ -13,7 +13,7 @@
             <RowDefinition Height="1*"/>
             <RowDefinition Height="3*"/>
         </Grid.RowDefinitions>
-        <Label Grid.Row="0" Content="Reservation system" FontFamily="Microsoft Sans Serif" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        <Label Grid.Row="0" Content="Reservation system" FontFamily="Monotype Corsiva" FontSize="36" HorizontalAlignment="Center" VerticalAlignment="Bottom"/>
         <StackPanel Orientation="Horizontal" Grid.Row="1" VerticalAlignment="Top" HorizontalAlignment="Center">
             <StackPanel Margin="20" Orientation="Vertical" Grid.Row="1">
                 <Label Content="Username:" Padding="0" Margin="10,0,10,0"/>
