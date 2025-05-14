@@ -1,5 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace ProjectPV178.Data
 {
@@ -72,6 +71,7 @@ namespace ProjectPV178.Data
             {
                 doctorsString += doc.Name + ", ";
             }
+            
             var hoursString = "";
             DateTime dt = new DateTime();
             for (int i = 1; i < 6; i++)
@@ -80,7 +80,7 @@ namespace ProjectPV178.Data
                 hoursString += $"{day} | {this.WorkingHours[i - 1].ToString()}\n";
             }
             return $"{this.Name}\n" +
-                $"{doctorsString}" +
+                $"{doctorsString}\n" +
                 $"-----------------\n" +
                 $"{hoursString}";
         }

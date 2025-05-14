@@ -50,7 +50,7 @@ namespace ProjectPV178.BussinessLayer
         {
             using var db = new PeopleDBContext();
 
-            return await db.People.FirstOrDefaultAsync(p=> p.Username == username);
+            return await db.People.FirstOrDefaultAsync(p => p.Username == username);
         }
         public static async Task<List<Person>> GetAllPeople()
         {
@@ -76,6 +76,6 @@ namespace ProjectPV178.BussinessLayer
             var a = db.Departments.ToList();
             return a;
         }
-        public static Person CurrentUser { get; set; }
+        public static Person? CurrentUser { get; set; }
     }
 }
