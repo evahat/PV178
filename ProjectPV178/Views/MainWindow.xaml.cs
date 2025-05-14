@@ -1,17 +1,5 @@
-﻿using System.Collections.ObjectModel;
-using System.Text;
+﻿using ProjectPV178.Views;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using ProjectPV178;
-using ProjectPV178.Data;
-using ProjectPV178.Views;
 
 namespace ProjectPV178
 {
