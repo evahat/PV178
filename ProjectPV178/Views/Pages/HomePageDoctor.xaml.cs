@@ -25,7 +25,7 @@ namespace ProjectPV178.Views.Pages
 
             Departments = new ObservableCollection<Department>
             (
-                Department.SampleDepartments()
+                PeopleRepository.GetAllDepartments().Result
             );
             DepartmentComboBox.ItemsSource = Departments;
 
@@ -64,15 +64,16 @@ namespace ProjectPV178.Views.Pages
         {
             if (AssignDep.SelectedItem is Department selectedDepartment)
             {
-                using (var db = new PeopleDBContext()){
-                    Doctor curr = (Doctor)PeopleRepository.CurrentUser;
-                    if (!curr.Departments.Any(d => d.Name == selectedDepartment.Name))
-                    {
-                        curr.Departments.Add(selectedDepartment);
-                        db.Update(curr);
-                        MyDepartments.Add(selectedDepartment);
-                    }
+                using var db = new PeopleDBContext() ;
+                Doctor curr = db.Doctors.FirstOrDefault(d=>d.Username == PeopleRepository.CurrentUser.Username);
+                var assigned = db.Departments.FirstOrDefault(d=>d.Id == selectedDepartment.Id);
+                if (!curr.Departments.Any(d => d.Name == selectedDepartment.Name))
+                {
+                    curr.Departments.Add(assigned);
+                    MyDepartments.Add(assigned);
                 }
+                db.SaveChanges();
+                
                 
             }
         }
