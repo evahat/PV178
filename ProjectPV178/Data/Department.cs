@@ -1,4 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using ProjectPV178.BussinessLayer;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using ProjectPV178.Database;
 
 namespace ProjectPV178.Data
 {
@@ -6,9 +9,10 @@ namespace ProjectPV178.Data
     public class Department
     {
         [Key]
+        public int Id { get; set; }
         public required string Name { get; set; }
         public List<DepartmentWorkingHours> WorkingHours { get; set; }
-        public required List<Doctor> Doctors { get; set; }
+        public List<Doctor> Doctors { get; set; } = [];
 
         public static List<string> DepartmentNames =
         [
@@ -53,16 +57,14 @@ namespace ProjectPV178.Data
             "Dermatology",
             "Geriatrics"
         ];
-        public static List<Department> SampleDepartments()
+        public static void SampleDepartments()
         {
             var rand = new Random();
-            return new List<Department>
+            for (int i = 0; i < 4; i++) 
             {
-                new Department{ Name=DepartmentNames[rand.Next(0,DepartmentNames.Count)], WorkingHours=DepartmentWorkingHours.SampleWH(),Doctors=[] },
-                new Department{ Name=DepartmentNames[rand.Next(0,DepartmentNames.Count)], WorkingHours=DepartmentWorkingHours.SampleWH(),Doctors=[] },
-                new Department{ Name=DepartmentNames[rand.Next(0,DepartmentNames.Count)], WorkingHours=DepartmentWorkingHours.SampleWH(),Doctors=[] },
-                new Department{ Name=DepartmentNames[rand.Next(0,DepartmentNames.Count)], WorkingHours=DepartmentWorkingHours.SampleWH(),Doctors=[] }
-            };
+                int j = i;
+                PeopleRepository.AddDepartment(j, DepartmentNames[rand.Next(DepartmentNames.Count)]);
+            }
         }
         public override string ToString()
         {

@@ -43,27 +43,40 @@ namespace ProjectPV178.BussinessLayer
                 CurrentUser = curr;
                 await db.SaveChangesAsync();
             }
-
         }
-        public static async Task AddReservation(string username, DateTime date, Department department)
+        public static void AddDepartment(int id, string name)
+        {
+            using var db = new PeopleDBContext();
+            if (db.Departments.Any(d => d.Id == id))
+                return;
+            var curr = new Department
+            {
+                Id = id,
+                Name = name,
+                WorkingHours = DepartmentWorkingHours.SampleWH(),
+            };
+            db.Departments.Add(curr);
+
+            db.SaveChanges();
+        }
+        public static async Task AddReservation(string username, DateOnly date, TimeOnly time, Department department)
         {
             using var db = new PeopleDBContext();
             Patient currPatient = (Patient) GetPerson(username).Result;
             var curr = new Reservation
             {
                 Date = date,
-                Department = department,
+                Time = time,
                 Patient = currPatient
             };
-            currPatient.Reservations.Add(curr);
             db.Update(currPatient);
             await db.SaveChangesAsync();
         }
-        public static List<Reservation> GetDateReservations(DateTime date, Department department)
+        public static List<Reservation> GetDateReservations(DateOnly date, Department department)
         {
             using var db = new PeopleDBContext();
 
-            return db.Reservations.Where(r => (r.Date == date & r.Department == department)).ToList();
+            return db.Reservations.Where(r => (r.Date == date & r.DepartmentID == department.Id)).ToList();
         }
 
         public static async Task<Person> GetPerson(string username)
@@ -93,8 +106,7 @@ namespace ProjectPV178.BussinessLayer
         public static async Task<List<Department>> GetAllDepartments()
         {
             using var db = new PeopleDBContext();
-            var a = db.Departments.ToList();
-            return a;
+            return db.Departments.ToList();
         }
         public static Person? CurrentUser { get; set; }
     }
