@@ -1,6 +1,7 @@
 ﻿using ProjectPV178.BussinessLayer;
 using ProjectPV178.Data;
 using ProjectPV178.Database;
+using ProjectPV178.Views;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -12,7 +13,7 @@ namespace ProjectPV178.ViewModel
 {
     public class DayReservation
     {
-        public ObservableCollection<Reservation> GenerateDay(Department department,Patient patient, DateOnly date) 
+        public static List<ReservationSlot> GenerateDay(Department department, DateOnly date) 
         {
             using var db = new PeopleDBContext();
             DayOfWeek day = date.DayOfWeek;
@@ -21,25 +22,22 @@ namespace ProjectPV178.ViewModel
                 //throw execpotin
             }
 
+            var info = new ObservableCollection<Reservation?>();
             var filteredReservations = PeopleRepository.GetDateReservations(date, department);
-            for (int i = department.WorkingHours[(int)day - 1].From; i < department.WorkingHours[(int)day - 1].To; i++)
+
+            var timeSlots = new List<TimeOnly>();
+            for (int i = department.WorkingHours[(int)day - 1].From; i <= department.WorkingHours[(int)day - 1].To; i++)
             {
-
-                var dateTime = new DateTime(date, new TimeOnly(i, 0, 0));
-
-                if (filteredReservations.();
-                {
-
-                }
+                timeSlots.Add(new TimeOnly(i,0,0));
             }
 
-
-            var info = new ObservableCollection<TimeReservation>();
-            for (int i = 8; i < 16; i++)
+            var reservationSlots = timeSlots.Select(time => new ReservationSlot
             {
-                info.Add(new TimeReservation(i, true));
-            }
-            return new Day(info);
+                Time = time,
+                Reservation = filteredReservations.FirstOrDefault(r => r.Time == time)
+            }).ToList();
+
+            return reservationSlots;
         }
     }
 }
