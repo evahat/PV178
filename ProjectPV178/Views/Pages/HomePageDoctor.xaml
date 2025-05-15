@@ -35,7 +35,7 @@
 
         <TabControl Grid.RowSpan="2" Grid.Column="0">
             <TabItem Header="Patients">
-                <DataGrid x:Name="DataGrid1" Grid.Row="1" AutoGenerateColumns="False">
+                <DataGrid CanUserAddRows="False" x:Name="DataGrid1" Grid.Row="1" AutoGenerateColumns="False">
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="Username" Binding="{Binding Username}"/>
                         <DataGridTextColumn Header="Name" Binding="{Binding Name}"/>
