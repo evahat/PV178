@@ -21,13 +21,11 @@
         </Grid.RowDefinitions>
 
         <StackPanel Grid.Column="1" Orientation="Vertical" Grid.Row="1">
-
-            <Calendar Margin="5"/>
-
+            <Calendar Margin="5" Name="SelectedDate" SelectionMode="MultipleRange" />
             <ComboBox x:Name="DepartmentComboBox" DisplayMemberPath="Name" Margin="5" ItemsSource="{Binding Departments}"  SelectionChanged="DepartmentComboBox_SelectionChanged"/>
             <Label x:Name="DepLabel" Margin="5" UseLayoutRounding="False"/>
         </StackPanel>
-        <Frame x:Name="Table" Grid.Column="0" Grid.Row="1"/>
+        
         <StackPanel Margin="0,0,10,0" Grid.Row="0" Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Center">
             <Label Grid.Row="0" Width="130" Grid.Column="1" Padding="0,0,5,0" HorizontalAlignment="Right" Content="Logged in as:" HorizontalContentAlignment="Right"/>
             <Label Grid.Row="0" Width="130" Grid.Column="1" HorizontalAlignment="Right" FontWeight="Bold" HorizontalContentAlignment="Right">
@@ -38,13 +36,19 @@
         </StackPanel>
         <TabControl Grid.RowSpan="2" Grid.Column="0">
             <TabItem Header="My Reservations">
-                <DataGrid x:Name="DataGrid1" Grid.Row="1" ItemsSource="{Binding Reservations}" AutoGenerateColumns="False">
-                    <DataGrid.Columns>
-                        <DataGridTextColumn Header="Time" Binding="{Binding Time}"/>
-                        <DataGridCheckBoxColumn Header="Reserved" Binding="{Binding IsReserved}"/>
-                        <DataGridTextColumn Header="Patient name" ></DataGridTextColumn>
-                    </DataGrid.Columns>
-                </DataGrid>
+                <StackPanel Orientation="Vertical">
+                    <WrapPanel>
+                        <Label Content="Selected date:"/>
+                        <Label Content="{Binding ElementName=SelectedDate, Path=SelectedDate, StringFormat=d, UpdateSourceTrigger=PropertyChanged }"/>
+                    </WrapPanel>
+                    <DataGrid x:Name="DataGrid1" Grid.Row="1" ItemsSource="{Binding Reservations}" AutoGenerateColumns="False">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Time" Binding="{Binding Time}"/>
+                            <DataGridCheckBoxColumn Header="Reserved" Binding="{Binding IsReserved,Mode=OneWay}"/>
+                            <DataGridTextColumn Header="Patient name" ></DataGridTextColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                    </StackPanel>
             </TabItem>
 
             <TabItem Header="Edit working hours">
