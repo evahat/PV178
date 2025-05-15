@@ -15,6 +15,7 @@ namespace ProjectPV178.Views
         public string NameString { get; set; }
         public ObservableCollection<TimeReservation> Reservations { get; set; }
         public ObservableCollection<Day> Days { get; set; }
+        public DateTime? Date { get; set; }
         public HomePagePatient()
         {
             InitializeComponent();
@@ -32,6 +33,7 @@ namespace ProjectPV178.Views
                 Day.SampleDay()
             };
             Reservations = Days[0].Info;
+            Date = SelectedDate.SelectedDate;
 
             DataContext = this;
         }
@@ -41,14 +43,6 @@ namespace ProjectPV178.Views
             {
                 DepLabel.Content = selectedDepartment.ToString();
             }
-        }
-        private void Button_Click_1(object sender, RoutedEventArgs e)
-        {
-            Table.Content = new MyReservations();
-        }
-        private void Button_Click_Users(object sender, RoutedEventArgs e)
-        {
-            Table.Content = new Users();
         }
         private void Button_Logout(object sender, RoutedEventArgs e)
         {
