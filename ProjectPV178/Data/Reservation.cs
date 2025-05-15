@@ -8,12 +8,12 @@ using System.Threading.Tasks;
 
 namespace ProjectPV178.Data
 {
+    [PrimaryKey(nameof(DepartmentID),nameof(Date),nameof(Time))]
     public class Reservation
     {
-        [Key]
-        public required Department Department { get; set; }
-        [Key]
-        public required DateTime Date { get; set; }
+        public int DepartmentID { get; set; }
+        public required DateOnly Date { get; set; }
+        public required TimeOnly Time { get; set; }
         public required Patient Patient { get; set; }
     }
 }
