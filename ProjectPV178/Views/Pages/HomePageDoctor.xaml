@@ -47,12 +47,13 @@
             </TabItem>
             <TabItem Header="My Departments">
                 <StackPanel>
+                    <Label Content="Assign to new department:" Padding="5,0,0,0" UseLayoutRounding="True"/>
                     <UniformGrid Rows="1" Columns="2">
                         <ComboBox x:Name="AssignDep" DisplayMemberPath="Name" Margin="5" ItemsSource="{Binding Departments}"/>
-                        <Button Content="Assign to new department" Margin="5,5,5,5" Padding="3,3,3,3" FontSize="10" Click="Button_Assign"/>
+                        <Button Content="Assign" Margin="5,5,5,5" Padding="3,3,3,3" FontSize="10" Click="Button_Assign"/>
                     </UniformGrid>
 
-                    <Label Content="My departments:" Padding="5,0,0,0" UseLayoutRounding="True"/>
+                    <Label Content="My departments:" Padding="5,10,0,0" UseLayoutRounding="True"/>
                     <ComboBox x:Name="MyDepartmentComboBox" DisplayMemberPath="Name" Margin="5" ItemsSource="{Binding MyDepartments}"  SelectionChanged="MyDepartmentComboBox_SelectionChanged"/>
                     <Label x:Name="MyDepLabel" Margin="5" UseLayoutRounding="False"/>
                 </StackPanel>
