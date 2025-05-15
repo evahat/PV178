@@ -45,6 +45,26 @@ namespace ProjectPV178.BussinessLayer
             }
 
         }
+        public static async Task AddReservation(string username, DateTime date, Department department)
+        {
+            using var db = new PeopleDBContext();
+            Patient currPatient = (Patient) GetPerson(username).Result;
+            var curr = new Reservation
+            {
+                Date = date,
+                Department = department,
+                Patient = currPatient
+            };
+            currPatient.Reservations.Add(curr);
+            db.Update(currPatient);
+            await db.SaveChangesAsync();
+        }
+        public static List<Reservation> GetDateReservations(DateTime date, Department department)
+        {
+            using var db = new PeopleDBContext();
+
+            return db.Reservations.Where(r => (r.Date == date & r.Department == department)).ToList();
+        }
 
         public static async Task<Person> GetPerson(string username)
         {
