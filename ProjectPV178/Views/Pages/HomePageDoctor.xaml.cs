@@ -92,12 +92,6 @@ namespace ProjectPV178.Views.Pages
                 PeopleRepository.GetAllDepartments().Result
             );
             DepartmentComboBox.ItemsSource = MyDepartments;
-
-            People = new ObservableCollection<Person>
-            (
-                PeopleRepository.GetAllPeople().Result
-            );
-            DataGrid1.ItemsSource = People;
         }
 
         private void OnPropertyChanged([CallerMemberName] string? name = null)
