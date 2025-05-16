@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace ProjectPV178.Data
+namespace ProjectPV178.Model
 {
     public class Person
     {

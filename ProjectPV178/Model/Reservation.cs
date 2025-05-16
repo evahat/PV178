@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ProjectPV178.Data
+namespace ProjectPV178.Model
 {
     [PrimaryKey(nameof(DepartmentID),nameof(Date),nameof(Time))]
     public class Reservation

@@ -1,13 +1,14 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using ProjectPV178.Model;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace ProjectPV178.Data
 {
-    [Owned]
-    public class DepartmentWorkingHours
+    public class DepartmentWorkingHoursManager
     {
-        public int From { get; set; }
-        public int To { get; set; }
-
         public static List<DepartmentWorkingHours> SampleWH()
         {
             var result = new List<DepartmentWorkingHours>();
@@ -20,9 +21,9 @@ namespace ProjectPV178.Data
             }
             return result;
         }
-        public override string ToString()
+        public string Print(DepartmentWorkingHours dwh)
         {
-            return $"{From.ToString()}:00 - {To.ToString()}:00";
+            return $"{dwh.From.ToString()}:00 - {dwh.To.ToString()}:00";
         }
     }
 }

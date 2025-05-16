@@ -1,4 +1,4 @@
-﻿namespace ProjectPV178.Data
+﻿namespace ProjectPV178.Model
 {
     public class Doctor : Person
     {
