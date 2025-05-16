@@ -17,10 +17,6 @@ namespace ProjectPV178.ViewModel
         {
             using var db = new PeopleDBContext();
             DayOfWeek day = date.DayOfWeek;
-            if (day == DayOfWeek.Sunday | day == DayOfWeek.Saturday)
-            {
-                //throw execpotin
-            }
 
             var info = new ObservableCollection<Reservation?>();
             var filteredReservations = PeopleRepository.GetDateReservations(date, department);
