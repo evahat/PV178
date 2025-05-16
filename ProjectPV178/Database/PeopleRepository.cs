@@ -64,7 +64,7 @@ namespace ProjectPV178.BussinessLayer
         {
             using var db = new PeopleDBContext();
 
-            return db.Reservations.Include(r=>r.Patient).Where(r => (r.Date == date & r.DepartmentID == department.Id)).ToList();
+            return db.Reservations.Include(r => r.Patient).Where(r => (r.Date == date & r.DepartmentID == department.Id)).ToList();
         }
 
         public static async Task<Person> GetPerson(string username)
@@ -76,8 +76,11 @@ namespace ProjectPV178.BussinessLayer
         public static async Task<List<Department>> GetAllDepartments()
         {
             using var db = new PeopleDBContext();
-            return db.Departments.Include(d=>d.Doctors).ToList();
+            return db.Departments.Include(d => d.Doctors).ToList();
         }
-        public static Person? CurrentUser { get; set; }
+        public static Person? CurrentUser
+        {
+            get; set;
+        }
     }
 }
