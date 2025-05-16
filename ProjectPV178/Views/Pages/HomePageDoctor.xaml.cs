@@ -14,7 +14,7 @@ namespace ProjectPV178.Views.Pages
     /// <summary>
     /// Interaction logic for HomePageDoctor.xaml
     /// </summary>
-    public partial class HomePageDoctor : Page,INotifyPropertyChanged
+    public partial class HomePageDoctor : Page, INotifyPropertyChanged
     {
         public ObservableCollection<Person> People { get; set; }
         private ObservableCollection<Department> _departments;
@@ -47,14 +47,15 @@ namespace ProjectPV178.Views.Pages
             InitializeAsync();
         }
         public void InitializeAsync()
-        { 
+        {
             Department.SampleDepartments();
             using var db = new PeopleDBContext();
-            var curr = db.Doctors.Include(d=>d.Departments).FirstOrDefault(d => d.Username == ((Doctor)PeopleRepository.CurrentUser).Username);
+            var curr = db.Doctors.Include(d => d.Departments).FirstOrDefault(d => d.Username == ((Doctor)PeopleRepository.CurrentUser).Username);
             MyDepartments = new ObservableCollection<Department>
                 (
                     curr.Departments
                 );
+            MyDaysOffDataGrid.ItemsSource = curr.DaysOff;
             db.SaveChanges();
 
             NameString = curr.Name + " " + curr.Surname;
@@ -91,7 +92,7 @@ namespace ProjectPV178.Views.Pages
             if (MyDepartmentComboBox.SelectedItem is Department selectedDepartment)
             {
                 using var db = new PeopleDBContext();
-                var assigned = db.Departments.Include(d=>d.Doctors).FirstOrDefault(d => d.Id == selectedDepartment.Id);
+                var assigned = db.Departments.Include(d => d.Doctors).FirstOrDefault(d => d.Id == selectedDepartment.Id);
 
                 MyDepLabel.Content = assigned.ToString();
                 db.SaveChanges();
@@ -107,16 +108,16 @@ namespace ProjectPV178.Views.Pages
         {
             if (AssignDep.SelectedItem is Department selectedDepartment)
             {
-                using var db = new PeopleDBContext() ;
-                var curr = db.Doctors.Include(d=>d.Departments).FirstOrDefault(d=>d.Username == PeopleRepository.CurrentUser.Username);
-                var assigned = db.Departments.FirstOrDefault(d=>d.Id == selectedDepartment.Id);
+                using var db = new PeopleDBContext();
+                var curr = db.Doctors.Include(d => d.Departments).FirstOrDefault(d => d.Username == PeopleRepository.CurrentUser.Username);
+                var assigned = db.Departments.FirstOrDefault(d => d.Id == selectedDepartment.Id);
                 if (!curr.Departments.Any(d => d.Name == selectedDepartment.Name))
                 {
                     curr.Departments.Add(assigned);
                     assigned.Doctors.Add(curr);
                 }
                 db.SaveChanges();
-                
+
                 InitializeAsync();
             }
         }
@@ -136,6 +137,22 @@ namespace ProjectPV178.Views.Pages
                 InitializeAsync();
             }
 
+        }
+
+        private void Button_DayOff(object sender, RoutedEventArgs e)
+        {
+            if (DayOffDatePicker.SelectedDate.HasValue)
+            {
+                using (var db = new PeopleDBContext())
+                {
+                    var curr = db.Doctors.SingleOrDefault(d => d.Username == PeopleRepository.CurrentUser.Username);
+
+                    DateOnly daOffDate = DateOnly.FromDateTime(DayOffDatePicker.SelectedDate.Value);
+                    curr.DaysOff.Add(daOffDate);
+                    db.SaveChanges();
+                }
+                InitializeAsync();
+            }
         }
     }
 
