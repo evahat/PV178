@@ -48,17 +48,6 @@
                     <Button Content="Remove" Margin="5,5,5,5" Padding="3,3,3,3" FontSize="10" Click="Button_RemoveUpcoming"/>
                 </StackPanel>
             </TabItem>
-            <TabItem Header="Patients">
-                <DataGrid CanUserAddRows="False" x:Name="DataGrid1" Grid.Row="1" AutoGenerateColumns="False">
-                    <DataGrid.Columns>
-                        <DataGridTextColumn Header="Username" Binding="{Binding Username}"/>
-                        <DataGridTextColumn Header="Name" Binding="{Binding Name}"/>
-                        <DataGridTextColumn Header="Surname" Binding="{Binding Surname}"/>
-                        <DataGridTextColumn Header="Password" Binding="{Binding Password}"/>
-                        <DataGridCheckBoxColumn  Header="IsDoctor" IsReadOnly="true" Binding="{Binding IsDoctor,Mode=OneWay}"/>
-                    </DataGrid.Columns>
-                </DataGrid>
-            </TabItem>
             <TabItem Header="My Departments">
                 <StackPanel>
                     <Label Content="Assign to new department:" Padding="5,0,0,0" UseLayoutRounding="True"/>
