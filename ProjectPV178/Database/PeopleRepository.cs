@@ -60,19 +60,6 @@ namespace ProjectPV178.BussinessLayer
 
             db.SaveChanges();
         }
-        public static async Task AddReservation(string username, DateOnly date, TimeOnly time, Department department)
-        {
-            using var db = new PeopleDBContext();
-            Patient currPatient = (Patient) GetPerson(username).Result;
-            var curr = new Reservation
-            {
-                Date = date,
-                Time = time,
-                Patient = currPatient
-            };
-            db.Update(currPatient);
-            await db.SaveChangesAsync();
-        }
         public static List<Reservation> GetDateReservations(DateOnly date, Department department)
         {
             using var db = new PeopleDBContext();
@@ -85,24 +72,6 @@ namespace ProjectPV178.BussinessLayer
             using var db = new PeopleDBContext();
 
             return await db.People.FirstOrDefaultAsync(p => p.Username == username);
-        }
-        public static async Task<List<Person>> GetAllPeople()
-        {
-            using var db = new PeopleDBContext();
-            var a = db.People.ToList();
-            return a;
-        }
-        public static async Task<List<Patient>> GetAllPatients()
-        {
-            using var db = new PeopleDBContext();
-            var a = db.Patients.ToList();
-            return a;
-        }
-        public static async Task<List<Doctor>> GetAllDoctors()
-        {
-            using var db = new PeopleDBContext();
-            var a = db.Doctors.Include(d=>d.Departments).ToList();
-            return a;
         }
         public static async Task<List<Department>> GetAllDepartments()
         {
