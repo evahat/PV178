@@ -21,7 +21,7 @@
 
         <StackPanel Grid.Column="1" Orientation="Vertical" Grid.Row="1">
             <Calendar Margin="5"/>
-            <ComboBox x:Name="DepartmentComboBox" DisplayMemberPath="Name" Margin="5" ItemsSource="{Binding Departments}"  SelectionChanged="DepartmentComboBox_SelectionChanged"/>
+            <ComboBox x:Name="DepartmentComboBox" DisplayMemberPath="Name" Margin="5" ItemsSource="{Binding Departments,UpdateSourceTrigger=PropertyChanged}"  SelectionChanged="DepartmentComboBox_SelectionChanged"/>
             <Label x:Name="DepLabel" Margin="5" UseLayoutRounding="False"/>
         </StackPanel>
         
@@ -48,13 +48,24 @@
             <TabItem Header="My Departments">
                 <StackPanel>
                     <Label Content="Assign to new department:" Padding="5,0,0,0" UseLayoutRounding="True"/>
-                    <UniformGrid Rows="1" Columns="2">
-                        <ComboBox x:Name="AssignDep" DisplayMemberPath="Name" Margin="5" ItemsSource="{Binding Departments}"/>
-                        <Button Content="Assign" Margin="5,5,5,5" Padding="3,3,3,3" FontSize="10" Click="Button_Assign"/>
-                    </UniformGrid>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="2*"/>
+                            <ColumnDefinition Width="1*"/>
+                        </Grid.ColumnDefinitions>
+                        <ComboBox Grid.Column="0" x:Name="AssignDep" DisplayMemberPath="Name" Margin="5" ItemsSource="{Binding Departments,UpdateSourceTrigger=PropertyChanged}"/>
+                        <Button Grid.Column="1" Content="Assign" Margin="5,5,5,5" Padding="3,3,3,3" FontSize="10" Click="Button_Assign"/>
+                    </Grid>
 
                     <Label Content="My departments:" Padding="5,10,0,0" UseLayoutRounding="True"/>
-                    <ComboBox x:Name="MyDepartmentComboBox" DisplayMemberPath="Name" Margin="5" ItemsSource="{Binding MyDepartments}"  SelectionChanged="MyDepartmentComboBox_SelectionChanged"/>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="2*"/>
+                            <ColumnDefinition Width="1*"/>
+                        </Grid.ColumnDefinitions>
+                        <ComboBox Grid.Column="0" x:Name="MyDepartmentComboBox" DisplayMemberPath="Name" Margin="5" ItemsSource="{Binding MyDepartments,UpdateSourceTrigger=PropertyChanged}"  SelectionChanged="MyDepartmentComboBox_SelectionChanged"/>
+                        <Button Grid.Column="1" Content="Remove" Margin="5,5,5,5" Padding="3,3,3,3" FontSize="10" Click="Button_Remove"/>
+                    </Grid>
                     <Label x:Name="MyDepLabel" Margin="5" UseLayoutRounding="False"/>
                 </StackPanel>
 
