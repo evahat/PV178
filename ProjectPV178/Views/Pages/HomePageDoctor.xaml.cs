@@ -19,6 +19,62 @@ namespace ProjectPV178.Views.Pages
     /// </summary>
     public partial class HomePageDoctor : Page, INotifyPropertyChanged
     {
+        public event PropertyChangedEventHandler? PropertyChanged;
+        public string NameString { get; set; }
+        private List<DateOnly> _myDaysOff;
+        public List<DateOnly> MyDaysOff 
+        {
+            get => _myDaysOff;
+            set
+            {
+                _myDaysOff = value;
+                UpdateDay();
+                OnPropertyChanged();
+            }
+        }
+
+        private DateTime? _date;
+        public DateTime? Date 
+        {
+            get => _date;
+            set
+            {
+                _date = value;
+                UpdateDay();
+                OnPropertyChanged();
+            }
+        }
+        private string _selectedDepLabel;
+        public string SelectedDepLabel
+        {
+            get => _selectedDepLabel;
+            set
+            {
+                _selectedDepLabel = value;
+                OnPropertyChanged();
+            }
+        }
+        private string _removeDepLabel;
+        public string RemoveDepLabel
+        {
+            get => _removeDepLabel;
+            set
+            {
+                _removeDepLabel = value;
+                OnPropertyChanged();
+            }
+        }
+        private ReservationSlot _upcomingSelected;
+        public ReservationSlot UpcomingSelected
+        {
+            get => _upcomingSelected;
+            set
+            {
+                _upcomingSelected = value;
+                OnPropertyChanged();
+            }
+        }
+
         private string _reservationInfo;
         public string ReservationInfo
         {
@@ -29,7 +85,6 @@ namespace ProjectPV178.Views.Pages
                 OnPropertyChanged();
             }
         }
-        public ObservableCollection<Person> People { get; set; }
         private ObservableCollection<Department> _departments;
         public ObservableCollection<Department> Departments
         {
@@ -50,11 +105,6 @@ namespace ProjectPV178.Views.Pages
                 OnPropertyChanged();
             }
         }
-        public string NameString { get; set; }
-
-
-        public event PropertyChangedEventHandler? PropertyChanged;
-
         private ObservableCollection<ReservationSlot> _day = new();
         public ObservableCollection<ReservationSlot> Day
         {
@@ -65,12 +115,61 @@ namespace ProjectPV178.Views.Pages
                 OnPropertyChanged();
             }
         }
-        public Department? SelectedDep { get; set; }
-        public DateTime? Date { get; set; }
-
+        private Department? _selectedDep;
+        public Department? SelectedDep
+        {
+            get => _selectedDep;
+            set
+            {
+                _selectedDep = value;
+                OnPropertyChanged();
+                UpdateSelectedDepartmentLabel();
+                UpdateDay();
+            }
+        }
+        private DateTime? _dayOffDate;
+        public DateTime? DayOffDate
+        {
+            get => _dayOffDate;
+            set
+            {
+                _dayOffDate = value;
+                OnPropertyChanged();
+                UpdateDay();
+            }
+        }
+        private Department? _removeSelected;
+        public Department? RemoveSelected
+        {
+            get => _removeSelected;
+            set
+            {
+                _removeSelected = value;
+                OnPropertyChanged();
+                UpdateRemovedDepartmentLabel();
+                UpdateDay();
+            }
+        }
+        private Department? _assignDepSelected;
+        public Department? AssignDepSelected
+        {
+            get => _assignDepSelected;
+            set
+            {
+                _assignDepSelected = value;
+                OnPropertyChanged();
+                UpdateDay();
+            }
+        }
         public HomePageDoctor()
         {
             InitializeComponent();
+            var curr = PeopleRepository.CurrentUser;
+            NameString = curr.Name + " " + curr.Surname;
+            Departments = new ObservableCollection<Department>
+            (
+                PeopleRepository.GetAllDepartments().Result
+            );
             DataContext = this;
             InitializeAsync();
         }
@@ -83,44 +182,14 @@ namespace ProjectPV178.Views.Pages
                 (
                     curr.Departments
                 );
-            MyDaysOffDataGrid.ItemsSource = curr.DaysOff;
+            MyDaysOff = curr.DaysOff;
             db.SaveChanges();
 
-            NameString = curr.Name + " " + curr.Surname;
-            Departments = new ObservableCollection<Department>
-            (
-                PeopleRepository.GetAllDepartments().Result
-            );
-            DepartmentComboBox.ItemsSource = MyDepartments;
         }
 
         private void OnPropertyChanged([CallerMemberName] string? name = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
-        }
-        private void DepartmentComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (DepartmentComboBox.SelectedItem is Department selectedDepartment)
-            {
-                using var db = new PeopleDBContext();
-                var assigned = db.Departments.Include(d => d.Doctors).FirstOrDefault(d => d.Id == selectedDepartment.Id);
-
-                DepLabel.Content = DepartmentManager.Print(assigned);
-                SelectedDep = selectedDepartment;
-                db.SaveChanges();
-            }
-            UpdateDay();
-        }
-        private void MyDepartmentComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (MyDepartmentComboBox.SelectedItem is Department selectedDepartment)
-            {
-                using var db = new PeopleDBContext();
-                var assigned = db.Departments.Include(d => d.Doctors).FirstOrDefault(d => d.Id == selectedDepartment.Id);
-
-                MyDepLabel.Content = DepartmentManager.Print(assigned);
-                db.SaveChanges();
-            }
         }
         private void Button_Logout(object sender, RoutedEventArgs e)
         {
@@ -130,7 +199,7 @@ namespace ProjectPV178.Views.Pages
 
         private void Button_Assign(object sender, RoutedEventArgs e)
         {
-            if (AssignDep.SelectedItem is Department selectedDepartment)
+            if (AssignDepSelected is Department selectedDepartment)
             {
                 using var db = new PeopleDBContext();
                 var curr = db.Doctors.Include(d => d.Departments).FirstOrDefault(d => d.Username == PeopleRepository.CurrentUser.Username);
@@ -148,7 +217,7 @@ namespace ProjectPV178.Views.Pages
 
         private void Button_Remove(object sender, RoutedEventArgs e)
         {
-            if (MyDepartmentComboBox.SelectedItem is Department selectedDepartment)
+            if (RemoveSelected is Department selectedDepartment)
             {
                 using (var db = new PeopleDBContext())
                 {
@@ -165,27 +234,21 @@ namespace ProjectPV178.Views.Pages
 
         private void Button_DayOff(object sender, RoutedEventArgs e)
         {
-            if (DayOffDatePicker.SelectedDate.HasValue)
+            if (DayOffDate.HasValue)
             {
                 using (var db = new PeopleDBContext())
                 {
                     var curr = db.Doctors.SingleOrDefault(d => d.Username == PeopleRepository.CurrentUser.Username);
 
-                    DateOnly daOffDate = DateOnly.FromDateTime(DayOffDatePicker.SelectedDate.Value);
-                    curr.DaysOff.Add(daOffDate);
-                    db.SaveChanges();
+                    DateOnly daOffDate = DateOnly.FromDateTime(DayOffDate.Value);
+                    if (!curr.DaysOff.Contains(daOffDate))
+                    {
+                        curr.DaysOff.Add(daOffDate);
+                        db.SaveChanges();
+                        InitializeAsync();
+                    }
                 }
-                InitializeAsync();
             }
-        }
-        private void DataGridUpcoming_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-
-        }
-        private void SelectedDate_SelectedDatesChanged(object sender, SelectionChangedEventArgs e)
-        {
-            Date = SelectedDate.SelectedDate;
-            UpdateDay();
         }
         private void UpdateDay()
         {
@@ -218,18 +281,50 @@ namespace ProjectPV178.Views.Pages
         }
         private void Button_RemoveUpcoming(object sender, RoutedEventArgs e)
         {
-            if (DataGridUpcoming.SelectedItem is ReservationSlot reservation)
+            if (UpcomingSelected is ReservationSlot reservation)
             {
                 using var db = new PeopleDBContext();
-                var curr = db.Reservations.Include(r => r.Patient)
-                    .FirstOrDefault(r => r.Patient.Username == reservation.Reservation.Patient.Username);
-                db.Reservations.Remove(curr);
-                db.SaveChanges();
-
-                UpdateDay();
-                //MyReservationInfo = "Removed";
+                if (reservation.Reservation != null) {
+                    var curr = db.Reservations.Include(r => r.Patient)
+                        .FirstOrDefault(r => r.Patient.Username == reservation.Reservation.Patient.Username);
+                    
+                    db.Reservations.Remove(curr);
+                    db.SaveChanges();
+                    UpdateDay();
+                }
             }
         }
+        private void UpdateSelectedDepartmentLabel()
+        {
+            if (SelectedDep != null)
+            {
+                using var db = new PeopleDBContext();
+                var fullDep = db.Departments.Include(d => d.Doctors)
+                                .FirstOrDefault(d => d.Id == SelectedDep.Id);
+
+                SelectedDepLabel = DepartmentManager.Print(fullDep);
+            }
+            else
+            {
+                SelectedDepLabel = string.Empty;
+            }
+        }
+        private void UpdateRemovedDepartmentLabel()
+        {
+            if (RemoveSelected != null)
+            {
+                using var db = new PeopleDBContext();
+                var fullDep = db.Departments.Include(d => d.Doctors)
+                                .FirstOrDefault(d => d.Id == RemoveSelected.Id);
+
+                RemoveDepLabel = DepartmentManager.Print(fullDep);
+            }
+            else
+            {
+                RemoveDepLabel = string.Empty;
+            }
+        }
+
     }
 
 }

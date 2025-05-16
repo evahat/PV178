@@ -20,10 +20,10 @@
         </Grid.RowDefinitions>
 
         <StackPanel Grid.Column="1" Orientation="Vertical" Grid.Row="1">
-            <Calendar SelectedDatesChanged="SelectedDate_SelectedDatesChanged" Margin="5" Name="SelectedDate"/>
-            <Label Content="Choose depratment:" Padding="5,0,0,0"/>
-            <ComboBox x:Name="DepartmentComboBox" DisplayMemberPath="Name" Margin="5" ItemsSource="{Binding Departments,UpdateSourceTrigger=PropertyChanged}"  SelectionChanged="DepartmentComboBox_SelectionChanged"/>
-            <Label x:Name="DepLabel" Margin="5" UseLayoutRounding="False"/>
+            <Calendar SelectedDate="{Binding Date}" Margin="5"/>
+            <Label Content="Choose department:" Padding="5,0,0,0"/>
+            <ComboBox ItemsSource="{Binding MyDepartments}" SelectedItem="{Binding SelectedDep}"  DisplayMemberPath="Name" Margin="5"/>
+            <Label Content="{Binding SelectedDepLabel}" Margin="5" UseLayoutRounding="False"/>
         </StackPanel>
         
         <StackPanel Margin="0,0,10,0" Grid.Row="0" Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Center">
@@ -37,7 +37,7 @@
         <TabControl Grid.RowSpan="2" Grid.Column="0">
             <TabItem Header="Upcoming">
                 <StackPanel>
-                    <DataGrid CanUserAddRows="False" SelectionChanged="DataGridUpcoming_SelectionChanged" x:Name="DataGridUpcoming" Grid.Row="1" ItemsSource="{Binding Day, UpdateSourceTrigger=PropertyChanged}" AutoGenerateColumns="False">
+                    <DataGrid CanUserAddRows="False" SelectedItem="{Binding UpcomingSelected}" Grid.Row="1" ItemsSource="{Binding Day, UpdateSourceTrigger=PropertyChanged}" AutoGenerateColumns="False">
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="Time" Binding="{Binding Time}"/>
                             <DataGridCheckBoxColumn Header="Reserved" Binding="{Binding IsReserved,Mode=OneWay}"/>
@@ -56,7 +56,7 @@
                             <ColumnDefinition Width="2*"/>
                             <ColumnDefinition Width="1*"/>
                         </Grid.ColumnDefinitions>
-                        <ComboBox Grid.Column="0" x:Name="AssignDep" DisplayMemberPath="Name" Margin="5" ItemsSource="{Binding Departments,UpdateSourceTrigger=PropertyChanged}"/>
+                        <ComboBox Grid.Column="0" DisplayMemberPath="Name" SelectedItem="{Binding AssignDepSelected }" Margin="5" ItemsSource="{Binding Departments,UpdateSourceTrigger=PropertyChanged}"/>
                         <Button Grid.Column="1" Content="Assign" Margin="5,5,5,5" Padding="3,3,3,3" FontSize="10" Click="Button_Assign"/>
                     </Grid>
 
@@ -66,10 +66,10 @@
                             <ColumnDefinition Width="2*"/>
                             <ColumnDefinition Width="1*"/>
                         </Grid.ColumnDefinitions>
-                        <ComboBox Grid.Column="0" x:Name="MyDepartmentComboBox" DisplayMemberPath="Name" Margin="5" ItemsSource="{Binding MyDepartments,UpdateSourceTrigger=PropertyChanged}"  SelectionChanged="MyDepartmentComboBox_SelectionChanged"/>
+                        <ComboBox Grid.Column="0" SelectedItem="{Binding RemoveSelected}" DisplayMemberPath="Name" Margin="5" ItemsSource="{Binding MyDepartments,UpdateSourceTrigger=PropertyChanged}"/>
                         <Button Grid.Column="1" Content="Remove" Margin="5,5,5,5" Padding="3,3,3,3" FontSize="10" Click="Button_Remove"/>
                     </Grid>
-                    <Label x:Name="MyDepLabel" Margin="5" UseLayoutRounding="False"/>
+                    <Label Content="{Binding RemoveDepLabel}" Margin="5" UseLayoutRounding="False"/>
                 </StackPanel>
 
             </TabItem>
@@ -81,11 +81,11 @@
                             <ColumnDefinition Width="1*"/>
                         </Grid.ColumnDefinitions>
 
-                        <DatePicker x:Name="DayOffDatePicker" Grid.Column="0"/>
+                        <DatePicker SelectedDate="{Binding DayOffDate}" Grid.Column="0"/>
                         <Button Grid.Column="1" Content="Take a day off" Click="Button_DayOff"/>
                     </Grid>
                     <Label Content="My days off:"/>
-                    <DataGrid CanUserAddRows="False" x:Name="MyDaysOffDataGrid">
+                    <DataGrid CanUserAddRows="False" ItemsSource="{Binding MyDaysOff, UpdateSourceTrigger=PropertyChanged}">
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="Date" Binding="{Binding .}"/>
                             
