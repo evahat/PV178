@@ -85,12 +85,12 @@
                         <Button Grid.Column="1" Content="Take a day off" Click="Button_DayOff"/>
                     </Grid>
                     <Label Content="My days off:"/>
-                    <DataGrid CanUserAddRows="False" ItemsSource="{Binding MyDaysOff, UpdateSourceTrigger=PropertyChanged}">
+                    <DataGrid CanUserAddRows="False" ItemsSource="{Binding MyDaysOff, UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding SelectedDayOff}">
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="Date" Binding="{Binding .}"/>
-                            
                         </DataGrid.Columns>
                     </DataGrid>
+                    <Button Grid.Column="1" Content="Remove" Margin="5,5,5,5" Padding="3,3,3,3" FontSize="10" Click="Button_RemoveDayOff"/>
                 </StackPanel>
             </TabItem>
         </TabControl>

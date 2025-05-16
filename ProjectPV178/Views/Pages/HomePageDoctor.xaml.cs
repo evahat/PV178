@@ -127,6 +127,16 @@ namespace ProjectPV178.Views.Pages
                 UpdateDay();
             }
         }
+        private DateOnly? _selectedDayOff;
+        public DateOnly? SelectedDayOff
+        {
+            get => _selectedDayOff;
+            set
+            {
+                _selectedDayOff = value;
+                OnPropertyChanged();
+            }
+        }
         private DateTime? _dayOffDate;
         public DateTime? DayOffDate
         {
@@ -325,6 +335,20 @@ namespace ProjectPV178.Views.Pages
             }
         }
 
+        private void Button_RemoveDayOff(object sender, RoutedEventArgs e)
+        {
+            if (SelectedDayOff!=null)
+            { 
+                using var db = new PeopleDBContext();
+                Doctor curr = db.Doctors.SingleOrDefault(d => d.Username == PeopleRepository.CurrentUser.Username);
+
+                curr.DaysOff.Remove((DateOnly)SelectedDayOff);
+                db.SaveChanges();
+                MyDaysOff = curr.DaysOff;
+            }   
+
+
+        }
     }
 
 }
