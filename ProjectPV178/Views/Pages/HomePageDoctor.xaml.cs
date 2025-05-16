@@ -111,7 +111,7 @@ namespace ProjectPV178.Views.Pages
                 using var db = new PeopleDBContext();
                 var assigned = db.Departments.Include(d => d.Doctors).FirstOrDefault(d => d.Id == selectedDepartment.Id);
 
-                DepLabel.Content = assigned.ToString();
+                DepLabel.Content = DepartmentManager.Print(assigned);
                 SelectedDep = selectedDepartment;
                 db.SaveChanges();
             }
@@ -124,7 +124,7 @@ namespace ProjectPV178.Views.Pages
                 using var db = new PeopleDBContext();
                 var assigned = db.Departments.Include(d => d.Doctors).FirstOrDefault(d => d.Id == selectedDepartment.Id);
 
-                MyDepLabel.Content = assigned.ToString();
+                MyDepLabel.Content = DepartmentManager.Print(assigned);
                 db.SaveChanges();
             }
         }

@@ -104,7 +104,7 @@ namespace ProjectPV178.Views
         {
             if (DepartmentComboBox.SelectedItem is Department selectedDepartment)
             {
-                DepLabel.Content = selectedDepartment.ToString();
+                DepLabel.Content = DepartmentManager.Print(selectedDepartment);
                 SelectedDep = selectedDepartment;
             }
             UpdateDay();
