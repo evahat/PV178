@@ -21,7 +21,7 @@ namespace ProjectPV178.Data
             }
             return result;
         }
-        public string Print(DepartmentWorkingHours dwh)
+        public static string Print(DepartmentWorkingHours dwh)
         {
             return $"{dwh.From.ToString()}:00 - {dwh.To.ToString()}:00";
         }

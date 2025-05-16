@@ -19,7 +19,7 @@ namespace ProjectPV178.Data
                 PeopleRepository.AddDepartment(j, Constants.DepartmentNames[rand.Next(Constants.DepartmentNames.Count)]);
             }
         }
-        public string Print(Department dep)
+        public static string Print(Department dep)
         {
             var doctorsString = "";
             foreach (var doc in dep.Doctors)
@@ -32,7 +32,7 @@ namespace ProjectPV178.Data
             for (int i = 1; i < 6; i++)
             {
                 var day = Enum.GetName(typeof(DayOfWeek), i);
-                hoursString += $"{day} | {dep.WorkingHours.ToList()[i - 1].ToString()}\n";
+                hoursString += $"{day} | {DepartmentWorkingHoursManager.Print(dep.WorkingHours.ToList()[i - 1])}\n";
             }
             return $"{dep.Name}\n" +
                 $"{doctorsString}\n" +
