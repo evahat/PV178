@@ -11,8 +11,8 @@ namespace ProjectPV178.Data
         [Key]
         public int Id { get; set; }
         public required string Name { get; set; }
+        public List<Doctor> Doctors { get; } = [];
         public List<DepartmentWorkingHours> WorkingHours { get; set; }
-        public List<Doctor> Doctors { get; set; } = [];
 
         public static List<string> DepartmentNames =
         [
@@ -79,7 +79,7 @@ namespace ProjectPV178.Data
             for (int i = 1; i < 6; i++)
             {
                 var day = Enum.GetName(typeof(DayOfWeek), i);
-                hoursString += $"{day} | {this.WorkingHours[i - 1].ToString()}\n";
+                hoursString += $"{day} | {this.WorkingHours.ToList()[i - 1].ToString()}\n";
             }
             return $"{this.Name}\n" +
                 $"{doctorsString}\n" +
