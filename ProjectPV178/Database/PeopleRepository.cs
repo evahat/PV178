@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ProjectPV178.Database;
 using ProjectPV178.Model;
+using ProjectPV178.Data;
 
 namespace ProjectPV178.BussinessLayer
 {
@@ -53,7 +54,7 @@ namespace ProjectPV178.BussinessLayer
             {
                 Id = id,
                 Name = name,
-                WorkingHours = DepartmentWorkingHours.SampleWH(),
+                WorkingHours = DepartmentWorkingHoursManager.SampleWH(),
             };
             db.Departments.Add(curr);
 

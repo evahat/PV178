@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using ProjectPV178.Data;
+using ProjectPV178.Model;
 
 namespace ProjectPV178.Database
 {
