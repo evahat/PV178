@@ -38,9 +38,7 @@ namespace ProjectPV178.Views
             {
                 ExceptionsSignUp.Content = "Unknown error";
             }
-
         }
-
         private async void Button_Click_Login(object sender, RoutedEventArgs e)
         {
             try

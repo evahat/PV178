@@ -21,7 +21,9 @@
         </Grid.RowDefinitions>
 
         <StackPanel Grid.Column="1" Orientation="Vertical" Grid.Row="1">
-            <Calendar SelectedDatesChanged="SelectedDate_SelectedDatesChanged" Margin="5" Name="SelectedDate" SelectionMode="MultipleRange" />
+            <Calendar SelectedDatesChanged="SelectedDate_SelectedDatesChanged" Margin="5" Name="SelectedDate" />
+            <Label Content="Choose depratment:" Padding="5,0,0,0"/>
+
             <ComboBox x:Name="DepartmentComboBox" DisplayMemberPath="Name" Margin="5" ItemsSource="{Binding Departments}"  SelectionChanged="DepartmentComboBox_SelectionChanged"/>
             <Label x:Name="DepLabel" Margin="5" UseLayoutRounding="False"/>
         </StackPanel>
@@ -48,13 +50,13 @@
                         </DataGrid.Columns>
                     </DataGrid>
                     <Label Content="{Binding ReservationInfo, UpdateSourceTrigger=PropertyChanged}"/>
-                    <Button Content="Reserve" Click="Reserve" />
+                    <Button Content="Reserve" Click="Reserve"/>
                 </StackPanel>
             </TabItem>
 
             <TabItem Header="My Reservations">
                 <StackPanel>
-                    <DataGrid CanUserAddRows="False" SelectionChanged="DataGrid2_SelectionChanged" x:Name="DataGrid2" Grid.Row="1" ItemsSource="{Binding MyReservations, UpdateSourceTrigger=PropertyChanged}" AutoGenerateColumns="False">
+                    <DataGrid CanUserAddRows="False" x:Name="DataGrid2" Grid.Row="1" ItemsSource="{Binding MyReservations, UpdateSourceTrigger=PropertyChanged}" AutoGenerateColumns="False">
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="Department" Binding="{Binding DepartmentID}"/>
                             <DataGridTextColumn Header="Date" Binding="{Binding Date}"/>

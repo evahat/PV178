@@ -13,6 +13,11 @@
             <RowDefinition Height="1*"/>
             <RowDefinition Height="3*"/>
         </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="4*"/>
+            <ColumnDefinition Width="3*"/>
+        </Grid.ColumnDefinitions>
+        <Image Grid.Column="1" Grid.RowSpan="2" Source="C:\Users\evaha\Source\Repos\pv178-project\ProjectPV178\Model\pngimg.com - doctor_PNG15987.png"/>
         <Label Grid.Row="0" Content="Reservation system" FontFamily="Monotype Corsiva" FontSize="36" HorizontalAlignment="Center" VerticalAlignment="Bottom"/>
         <StackPanel Orientation="Horizontal" Grid.Row="1" VerticalAlignment="Top" HorizontalAlignment="Center">
             <StackPanel Margin="20" Orientation="Vertical" Grid.Row="1">

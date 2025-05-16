@@ -1,13 +1,16 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ProjectPV178.BussinessLayer;
-using ProjectPV178.Data;
 using ProjectPV178.Database;
+using ProjectPV178.Model;
+using ProjectPV178.ViewModel;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Numerics;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
+using ProjectPV178.Data;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace ProjectPV178.Views.Pages
 {
@@ -16,6 +19,16 @@ namespace ProjectPV178.Views.Pages
     /// </summary>
     public partial class HomePageDoctor : Page, INotifyPropertyChanged
     {
+        private string _reservationInfo;
+        public string ReservationInfo
+        {
+            get => _reservationInfo;
+            set
+            {
+                _reservationInfo = value;
+                OnPropertyChanged();
+            }
+        }
         public ObservableCollection<Person> People { get; set; }
         private ObservableCollection<Department> _departments;
         public ObservableCollection<Department> Departments
@@ -39,7 +52,22 @@ namespace ProjectPV178.Views.Pages
         }
         public string NameString { get; set; }
 
+
         public event PropertyChangedEventHandler? PropertyChanged;
+
+        private ObservableCollection<ReservationSlot> _day = new();
+        public ObservableCollection<ReservationSlot> Day
+        {
+            get => _day;
+            set
+            {
+                _day = value;
+                OnPropertyChanged();
+            }
+        }
+        public Department? SelectedDep { get; set; }
+        public DateTime? Date { get; set; }
+
         public HomePageDoctor()
         {
             InitializeComponent();
@@ -48,7 +76,7 @@ namespace ProjectPV178.Views.Pages
         }
         public void InitializeAsync()
         {
-            Department.SampleDepartments();
+            DepartmentManager.SampleDepartments();
             using var db = new PeopleDBContext();
             var curr = db.Doctors.Include(d => d.Departments).FirstOrDefault(d => d.Username == ((Doctor)PeopleRepository.CurrentUser).Username);
             MyDepartments = new ObservableCollection<Department>
@@ -63,7 +91,7 @@ namespace ProjectPV178.Views.Pages
             (
                 PeopleRepository.GetAllDepartments().Result
             );
-            DepartmentComboBox.ItemsSource = Departments;
+            DepartmentComboBox.ItemsSource = MyDepartments;
 
             People = new ObservableCollection<Person>
             (
@@ -84,8 +112,10 @@ namespace ProjectPV178.Views.Pages
                 var assigned = db.Departments.Include(d => d.Doctors).FirstOrDefault(d => d.Id == selectedDepartment.Id);
 
                 DepLabel.Content = assigned.ToString();
+                SelectedDep = selectedDepartment;
                 db.SaveChanges();
             }
+            UpdateDay();
         }
         private void MyDepartmentComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -152,6 +182,58 @@ namespace ProjectPV178.Views.Pages
                     db.SaveChanges();
                 }
                 InitializeAsync();
+            }
+        }
+        private void DataGridUpcoming_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+        }
+        private void SelectedDate_SelectedDatesChanged(object sender, SelectionChangedEventArgs e)
+        {
+            Date = SelectedDate.SelectedDate;
+            UpdateDay();
+        }
+        private void UpdateDay()
+        {
+            ReservationInfo = "";
+            using var db = new PeopleDBContext();
+
+            db.SaveChanges();
+
+            if (SelectedDep == null || Date == null)
+            {
+                Day = [];
+                return;
+            }
+            if (SelectedDep.Doctors.All(d => d.DaysOff.Contains(DateOnly.FromDateTime((DateTime)Date))) || DateOnly.FromDateTime((DateTime)Date).DayOfWeek == DayOfWeek.Sunday || DateOnly.FromDateTime((DateTime)Date).DayOfWeek == DayOfWeek.Saturday)
+            {
+                ReservationInfo = "The ordination is closed on this day.";
+                Day = [];
+                return;
+            }
+            if (SelectedDep.Doctors.Any(d => d.DaysOff.Contains(DateOnly.FromDateTime((DateTime)Date))))
+            {
+                var docs = SelectedDep.Doctors.Where(d => d.DaysOff.Contains(DateOnly.FromDateTime((DateTime)Date))).Select(d => $"{d.Name} {d.Surname}");
+
+                ReservationInfo = "Some doctors have a day off today:" + string.Join(", ", docs);
+            }
+            Day = new ObservableCollection<ReservationSlot>(
+                DayReservation.GenerateDay(SelectedDep, DateOnly.FromDateTime((DateTime)Date))
+            );
+
+        }
+        private void Button_RemoveUpcoming(object sender, RoutedEventArgs e)
+        {
+            if (DataGridUpcoming.SelectedItem is ReservationSlot reservation)
+            {
+                using var db = new PeopleDBContext();
+                var curr = db.Reservations.Include(r => r.Patient)
+                    .FirstOrDefault(r => r.Patient.Username == reservation.Reservation.Patient.Username);
+                db.Reservations.Remove(curr);
+                db.SaveChanges();
+
+                UpdateDay();
+                //MyReservationInfo = "Removed";
             }
         }
     }

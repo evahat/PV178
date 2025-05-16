@@ -2,6 +2,7 @@
 using ProjectPV178.BussinessLayer;
 using ProjectPV178.Data;
 using ProjectPV178.Database;
+using ProjectPV178.Model;
 using ProjectPV178.ViewModel;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -84,7 +85,7 @@ namespace ProjectPV178.Views
         }
         private async Task InitializeAsync()
         {
-            Department.SampleDepartments();
+            DepartmentManager.SampleDepartments();
 
             Departments = new ObservableCollection<Department>
             (

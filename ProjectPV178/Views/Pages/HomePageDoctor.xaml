@@ -20,7 +20,8 @@
         </Grid.RowDefinitions>
 
         <StackPanel Grid.Column="1" Orientation="Vertical" Grid.Row="1">
-            <Calendar Margin="5"/>
+            <Calendar SelectedDatesChanged="SelectedDate_SelectedDatesChanged" Margin="5" Name="SelectedDate"/>
+            <Label Content="Choose depratment:" Padding="5,0,0,0"/>
             <ComboBox x:Name="DepartmentComboBox" DisplayMemberPath="Name" Margin="5" ItemsSource="{Binding Departments,UpdateSourceTrigger=PropertyChanged}"  SelectionChanged="DepartmentComboBox_SelectionChanged"/>
             <Label x:Name="DepLabel" Margin="5" UseLayoutRounding="False"/>
         </StackPanel>
@@ -34,6 +35,19 @@
         </StackPanel>
 
         <TabControl Grid.RowSpan="2" Grid.Column="0">
+            <TabItem Header="Upcoming">
+                <StackPanel>
+                    <DataGrid CanUserAddRows="False" SelectionChanged="DataGridUpcoming_SelectionChanged" x:Name="DataGridUpcoming" Grid.Row="1" ItemsSource="{Binding Day, UpdateSourceTrigger=PropertyChanged}" AutoGenerateColumns="False">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Time" Binding="{Binding Time}"/>
+                            <DataGridCheckBoxColumn Header="Reserved" Binding="{Binding IsReserved,Mode=OneWay}"/>
+                            <DataGridTextColumn Header="Patient name" Binding="{Binding Reservation.Patient.Name}"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                    <Label Content="{Binding ReservationInfo, UpdateSourceTrigger=PropertyChanged}"/>
+                    <Button Content="Remove" Margin="5,5,5,5" Padding="3,3,3,3" FontSize="10" Click="Button_RemoveUpcoming"/>
+                </StackPanel>
+            </TabItem>
             <TabItem Header="Patients">
                 <DataGrid CanUserAddRows="False" x:Name="DataGrid1" Grid.Row="1" AutoGenerateColumns="False">
                     <DataGrid.Columns>
