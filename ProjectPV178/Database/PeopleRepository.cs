@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using ProjectPV178.Data;
 using ProjectPV178.Database;
+using ProjectPV178.Model;
 
 namespace ProjectPV178.BussinessLayer
 {
@@ -76,7 +76,7 @@ namespace ProjectPV178.BussinessLayer
         {
             using var db = new PeopleDBContext();
 
-            return db.Reservations.Where(r => (r.Date == date & r.DepartmentID == department.Id)).ToList();
+            return db.Reservations.Include(r=>r.Patient).Where(r => (r.Date == date & r.DepartmentID == department.Id)).ToList();
         }
 
         public static async Task<Person> GetPerson(string username)
