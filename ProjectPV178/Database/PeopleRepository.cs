@@ -100,13 +100,13 @@ namespace ProjectPV178.BussinessLayer
         public static async Task<List<Doctor>> GetAllDoctors()
         {
             using var db = new PeopleDBContext();
-            var a = db.Doctors.ToList();
+            var a = db.Doctors.Include(d=>d.Departments).ToList();
             return a;
         }
         public static async Task<List<Department>> GetAllDepartments()
         {
             using var db = new PeopleDBContext();
-            return db.Departments.ToList();
+            return db.Departments.Include(d=>d.Doctors).ToList();
         }
         public static Person? CurrentUser { get; set; }
     }

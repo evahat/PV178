@@ -28,16 +28,17 @@ namespace ProjectPV178.Database
         {
             modelBuilder.Entity<Department>()
                 .OwnsMany(d => d.WorkingHours);
+
             modelBuilder.Entity<Department>()
                 .Property(d => d.Id)
                 .ValueGeneratedNever();
+
             modelBuilder.Entity<Department>()
                 .HasMany(d => d.Doctors)
                 .WithMany(doc => doc.Departments);
+
             modelBuilder.Entity<Reservation>()
                 .HasOne(r => r.Patient);
-            modelBuilder.Entity<Doctor>()
-                .HasMany(d => d.Departments);
 
            base.OnModelCreating(modelBuilder);
         }
